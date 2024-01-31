@@ -1,11 +1,10 @@
 const express = require('express');
-const app = express();
-const sequelize = require('./config/database');
-const cors = require('cors')
-const Member = require('./models/member')
+const sequelize = require('./config/database.js');
+const cors = require('cors');
+const Member =  require('./models/member.js');
+const memberRoute = require('./routes/memberRoute.js');
 
-//get routers 
-const memberRoute = require('./routes/memberRoute')
+const app = express();
 
 app.use(cors())
 app.use(express.json())
@@ -25,3 +24,6 @@ try {
 	console.error('Unable to connect to the database:', error);
 	process.exit(1);
 }
+
+
+module.exports = app;

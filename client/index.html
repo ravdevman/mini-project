@@ -63,9 +63,14 @@
 				  </div>
 				</fieldset>
 				<button type="submit" class="btn btn-primary">Ajouter</button>
-				</div>
-			</form>
-
+					<div class="row mb-3">
+						<label for="formFile" class="form-label">Default file input</label>
+						<div class="col-sm-10">
+							<input class="form-control" type="file" accept=".json" id="fileInput">
+						</div>
+					</div>
+				</form>
+			</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 	<script>
@@ -77,6 +82,7 @@
 			let phoneNumber = document.getElementById('inputPhoneNumber').value;
 			let country = document.getElementById('inputCountry').value;
 			let gender = document.querySelector('input[name="genreRadios"]:checked').value;
+			let fileInput = document.getElementById('fileInput');
 
 			let errorMessage = document.getElementById('message');
 
@@ -88,6 +94,49 @@
 				phoneNumber: phoneNumber,
 				country: country
         	};
+			
+			if (fileInput.files.length > 0) {
+				let file = fileInput.files[0]
+				if (file.type === 'application/json') {
+
+					const fileReader = new FileReader();
+					fileReader.readAsText(file);
+					fileReader.onload = async function() {
+						let formData = JSON.parse(fileReader.result);
+						fileInput.value = ""
+						try {
+							const response = await fetch('http://localhost:3000/member/import', {
+								method: 'POST',
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								body: JSON.stringify(formData) 
+							})
+							if (response.ok) {
+
+							console.log('Membre ajouté avec succès !', response);
+							errorMessage.innerText = 'Membre ajouté avec succès !';
+							errorMessage.className = 'alert alert-success';
+							resetErrorMessage()
+						} else {
+							response.json().then(data => {
+								errorMessage.innerText = data.message;
+								errorMessage.className = 'alert alert-danger';
+								console.error('Erreur lors de l\'ajout du membre :', data.message);
+								resetErrorMessage()
+							});
+						}
+						} catch (error) {
+							console.error('Erreur lors de la requête :', error);
+						}
+					};
+				} else {
+					errorMessage.innerText = 'Veiller importer un fichier JSON.';
+					errorMessage.className = 'alert alert-danger';
+					resetErrorMessage()
+				}
+			}
+
 
 			const resetErrorMessage = () => {
 				setTimeout(() => {

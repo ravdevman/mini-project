@@ -1,0 +1,26 @@
+[
+    {
+        "firstName": "rayane",
+        "lastName": "madoune",
+        "dateOfBirth": "2003-05-15",
+        "gender": "Homme",
+        "phoneNumber": "0700311790",
+        "country": "maroc"
+    },
+    {
+        "firstName": "hamid",
+        "lastName": "sanid",
+        "dateOfBirth": "2001-07-30",
+        "gender": "Female",
+        "phoneNumber": "0610311791",
+        "country": "maroc"
+    },
+	{
+        "firstName": "karim",
+        "lastName": "hachmi",
+        "dateOfBirth": "1992-08-25",
+        "gender": "Femme",
+        "phoneNumber": "0604411791",
+        "country": "autre"
+    }
+]

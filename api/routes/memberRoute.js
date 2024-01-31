@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Member = require('../models/member')
+const Member = require('../models/member.js'); // Assuming the file path is correct
+
 
 router.post('/add', async (req, res) => {
 	try {
@@ -31,8 +32,6 @@ router.post('/add', async (req, res) => {
 		} else {
 			status = "en attente";
 		};
-
-
 		//b ***
 
 		// if morocan min age > 16
@@ -50,7 +49,6 @@ router.post('/add', async (req, res) => {
 				});
 			};
 		};
-
 
 		//c ***
 		// from the 11 inscription age should be betwwen average age 10 % and average age -10%
@@ -98,6 +96,33 @@ router.post('/add', async (req, res) => {
 		message: 'Failed to create member'
 	  });
 	}
-  });
+});
+
+router.post('/import', async (req, res) => {
+	try {
+		let memberListFile = req.body
+		const registrationDate = new Date();
+		const status = "valide"
+		for (const member of memberListFile) {
+            await Member.create({
+                firstName: member.firstName,
+                lastName: member.lastName,
+                dateOfBirth: member.dateOfBirth,
+                gender: member.gender,
+                phoneNumber: member.phoneNumber,
+                country: member.country,
+				registrationDate,
+				status
+            });
+            console.log('Member added:', member.firstName, member.lastName);
+        }
+	}catch {
+		console.error('Error creating members:', error);
+		return res.status(500).json({
+		  message: 'Failed to create members'
+		});
+	}
+})
+
 
 module.exports = router;
