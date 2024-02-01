@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('mini_project', 'postgres', 'rav', {
-  host: 'localhost',
+  host: 'db',
   dialect: 'postgres'
 });
 
